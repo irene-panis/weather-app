@@ -1,5 +1,7 @@
+const API_KEY = "fcd695651489692dd902cf171673c895";
+
 function getWeather(city) {
-  var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=fcd695651489692dd902cf171673c895&units=imperial";
+  var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY + "&units=imperial";
 
   fetch(url)
   .then(function(response) {
@@ -7,9 +9,7 @@ function getWeather(city) {
   })
   .then(function(data) {
     console.log(data);
-    console.log("Temp: " + data.main.temp);
-    console.log("Wind: " + data.wind.speed + " mph");
-    console.log("Humidity: " + data.main.humidity + "%");
+    displayCurrent(data);
   })
 
 }
@@ -31,7 +31,30 @@ function getForecast() {
     })
 };
 
+function displayCurrent(data) {
+
+  // MAIN DISPLAY - CITY/DATE/ICON //
+  $( '.display-city' ).text(data.name);
+  $( '.display-date' ).text(dayjs.unix(data.dt).format("MMMM DD, YYYY"));
+  var src = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png';
+  $( '.display-wth-icon' ).attr('src', src);
+  $( '.display-wth-text' ).text(data.weather[0].main);
+
+  // MAIN DISPLAY - CARDS // 
+  $( '#current-temp > .card-title' ).text("temp");
+  $( '#current-temp > .card-content' ).text(Math.floor(data.main.temp) + "F");
+
+  $( '#current-wind > .card-title' ).text("wind");
+  $( '#current-wind > .card-content' ).text(data.wind.speed + "mph");
+
+  $( '#current-hmd > .card-title' ).text("humidity");
+  $( '#current-hmd > .card-content' ).text(data.main.humidity + "%");
+}
+
 $( '#search-btn' ).on('click', function() {
   var city = $( '#search-text' ).val();
   getWeather(city);
 });
+
+getWeather("san diego");
+getForecast();
