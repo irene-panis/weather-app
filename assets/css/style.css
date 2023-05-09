@@ -40,3 +40,37 @@ h1 {
   border-radius: 20px;
   padding: 5px 20px;
 }
+
+.current-day {
+  display: flex;
+  justify-content: space-around;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-transform: lowercase;
+}
+
+.weather-info {
+  display: flex;
+  align-items: center;
+}
+
+.current-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 125%;
+  text-transform: uppercase;
+}
+
+.card-content {
+  font-size: 300%;
+}
+
