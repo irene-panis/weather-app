@@ -42,13 +42,16 @@ function displayCurrent(data) {
 
   // MAIN DISPLAY - CARDS // 
   $( '#current-temp > .card-title' ).text("temp");
-  $( '#current-temp > .card-content' ).text(Math.floor(data.main.temp) + "F");
+  $( '#current-temp > .card-content' ).text(Math.floor(data.main.temp));
+  $( '#current-temp > .card-small-text' ).text("F");
 
   $( '#current-wind > .card-title' ).text("wind");
-  $( '#current-wind > .card-content' ).text(data.wind.speed + "mph");
+  $( '#current-wind > .card-content' ).text(data.wind.speed);
+  $( '#current-wind > .card-small-text' ).text("mph");
 
   $( '#current-hmd > .card-title' ).text("humidity");
-  $( '#current-hmd > .card-content' ).text(data.main.humidity + "%");
+  $( '#current-hmd > .card-content' ).text(data.main.humidity);
+  $( '#current-hmd > .card-small-text' ).text("%");
 }
 
 $( '#search-btn' ).on('click', function() {
@@ -56,5 +59,4 @@ $( '#search-btn' ).on('click', function() {
   getWeather(city);
 });
 
-getWeather("san diego");
 getForecast();
