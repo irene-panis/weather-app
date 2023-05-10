@@ -8,26 +8,24 @@ function getWeather(city) {
     return response.json();
   })
   .then(function(data) {
-    console.log(data);
     displayCurrent(data);
   })
 
 }
 
-function getForecast() {
-  var url = "https://api.openweathermap.org/data/2.5/forecast?q=wellington&appid=fcd695651489692dd902cf171673c895&units=imperial";
+function getForecast(city) {
+  var url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=fcd695651489692dd902cf171673c895&units=imperial";
 
   fetch(url)
     .then(function(response) {
       return response.json();
     })
     .then(function(data) {
-      console.log(data);
-      console.log(data.list[8]);
-      console.log(data.list[16]);
-      console.log(data.list[24]);
-      console.log(data.list[32]);
-      console.log(data.list[39]);
+      displayForecast(data.list[8], 0);
+      displayForecast(data.list[16], 1);
+      displayForecast(data.list[24], 2);
+      displayForecast(data.list[32], 3);
+      displayForecast(data.list[39], 4);
     })
 };
 
@@ -57,6 +55,21 @@ function displayCurrent(data) {
 $( '#search-btn' ).on('click', function() {
   var city = $( '#search-text' ).val();
   getWeather(city);
+  getForecast(city);
 });
 
-getForecast();
+function displayForecast(data, i) {
+  $( '.fc-day-title' ).eq(i).text(dayjs.unix(data.dt).format("MM/DD/YY"));
+  var src = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png';
+  $( '.fc-day-icon' ).eq(i).attr('src', src);
+  $( '.fc-day-temp' ).eq(i).text("temp: " + Math.floor(data.main.temp) + "F");
+  $( '.fc-day-wind' ).eq(i).text("wind: " + Math.floor(data.wind.speed) + " MPH");
+  $( '.fc-day-hmd' ).eq(i).text("humidity: " + Math.floor(data.main.humidity) + "%");
+}
+
+function init() {
+  getWeather("San Diego");
+  getForecast("San Diego");
+}
+
+init();
