@@ -1,5 +1,7 @@
 const API_KEY = "fcd695651489692dd902cf171673c895";
 
+var searchHistory = [];
+
 function getWeather(city) {
   var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY + "&units=imperial";
 
@@ -52,12 +54,6 @@ function displayCurrent(data) {
   $( '#current-hmd > .card-small-text' ).text("%");
 }
 
-$( '#search-btn' ).on('click', function() {
-  var city = $( '#search-text' ).val();
-  getWeather(city);
-  getForecast(city);
-});
-
 function displayForecast(data, i) {
   $( '.fc-day-title' ).eq(i).text(dayjs.unix(data.dt).format("MM/DD/YY"));
   var src = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png';
@@ -67,9 +63,34 @@ function displayForecast(data, i) {
   $( '.fc-day-hmd' ).eq(i).text("humidity: " + Math.floor(data.main.humidity) + "%");
 }
 
+function storeHistory(city) {
+  if (searchHistory.length === 5) {
+    searchHistory.shift();
+    searchHistory.push(city);
+  } else {
+    searchHistory.push(city);
+  }
+}
+
+function displayHistory(searchHistory) {
+  $( '.dropdown-menu' ).html('');
+  for (let i = 0; i < searchHistory.length; i++) {
+    var city = $('<li><a class="dropdown-item" href="#">' + searchHistory[i] + '</a></li>');
+    $( '.dropdown-menu' ).append(city);
+  }
+}
+
 function init() {
   getWeather("San Diego");
   getForecast("San Diego");
 }
+
+$( '#search-btn' ).on('click', function() {
+  var city = $( '#search-text' ).val();
+  storeHistory(city);
+  displayHistory(searchHistory);
+  getWeather(city);
+  getForecast(city);
+});
 
 init();
