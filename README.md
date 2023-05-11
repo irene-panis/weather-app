@@ -12,7 +12,7 @@ Invalid searches notify the user that the city they inputted could not be found,
 
 Live: https://irene-panis.github.io/weather-app/
 
-![Screenshot of a page titled Work Day Scheduler that contains grey, red, and green time blocks users may type tasks into](assets/img/preview.jpg)
+![Screenshot of a weather app page that shows the weather and forecast information for San Diego](assets/img/preview.jpg)
 
 ## Technologies Used
 * jQuery
