@@ -1,6 +1,6 @@
 const API_KEY = "fcd695651489692dd902cf171673c895";
 
-var searchHistory = [];
+var searchHistory;
 var cityIsValid;
 
 function getWeather(city) {
@@ -71,9 +71,6 @@ function displayForecast(data, i) {
   $( '.fc-day-hmd' ).eq(i).text("humidity: " + Math.floor(data.main.humidity) + "%");
 }
 
-
-// TODO:
-// do local storage thingy
 function storeHistory(city) {
   if (searchHistory.includes(city)) {
     return;
@@ -84,6 +81,7 @@ function storeHistory(city) {
   } else {
     searchHistory.push(city);
   }
+  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 }
 
 function displayHistory(searchHistory) {
@@ -94,11 +92,15 @@ function displayHistory(searchHistory) {
   }
 }
 
-// TODO:
-// try to find some way to check user location ?!??! idk
 function init() {
   getWeather("San Diego");
   getForecast("San Diego");
+  var search = localStorage.getItem("searchHistory");
+  if (search === null) {
+    searchHistory = [];
+  } else {
+    searchHistory = JSON.parse(search);
+  }
 }
 
 $( '#search-btn' ).on('click', function() {
