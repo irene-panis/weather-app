@@ -1,6 +1,7 @@
 const API_KEY = "fcd695651489692dd902cf171673c895";
 
 var searchHistory = [];
+var cityIsValid;
 
 function getWeather(city) {
   var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY + "&units=imperial";
@@ -10,7 +11,14 @@ function getWeather(city) {
     return response.json();
   })
   .then(function(data) {
-    displayCurrent(data);
+    if (data.cod !== '404') {
+      $( '#search-text' ).removeClass('is-invalid');
+      displayCurrent(data);
+      storeHistory(data.name);
+      displayHistory(searchHistory);
+    } else {
+      $( '#search-text' ).addClass('is-invalid');
+    }
   })
 
 }
@@ -63,7 +71,13 @@ function displayForecast(data, i) {
   $( '.fc-day-hmd' ).eq(i).text("humidity: " + Math.floor(data.main.humidity) + "%");
 }
 
+
+// TODO:
+// do local storage thingy
 function storeHistory(city) {
+  if (searchHistory.includes(city)) {
+    return;
+  }
   if (searchHistory.length === 5) {
     searchHistory.shift();
     searchHistory.push(city);
@@ -75,11 +89,13 @@ function storeHistory(city) {
 function displayHistory(searchHistory) {
   $( '.dropdown-menu' ).html('');
   for (let i = 0; i < searchHistory.length; i++) {
-    var city = $('<li><a class="dropdown-item" href="#">' + searchHistory[i] + '</a></li>');
+    var city = $('<li><a class="dropdown-item" href="#">' + searchHistory[i].toLowerCase() + '</a></li>');
     $( '.dropdown-menu' ).append(city);
   }
 }
 
+// TODO:
+// try to find some way to check user location ?!??! idk
 function init() {
   getWeather("San Diego");
   getForecast("San Diego");
@@ -87,8 +103,6 @@ function init() {
 
 $( '#search-btn' ).on('click', function() {
   var city = $( '#search-text' ).val();
-  storeHistory(city);
-  displayHistory(searchHistory);
   getWeather(city);
   getForecast(city);
 });
