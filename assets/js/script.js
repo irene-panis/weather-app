@@ -1,7 +1,6 @@
 const API_KEY = "fcd695651489692dd902cf171673c895";
 
 var searchHistory;
-var cityIsValid;
 
 function getWeather(city) {
   var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY + "&units=imperial";
@@ -20,7 +19,6 @@ function getWeather(city) {
       $( '#search-text' ).addClass('is-invalid');
     }
   })
-
 }
 
 function getForecast(city) {
@@ -31,11 +29,13 @@ function getForecast(city) {
       return response.json();
     })
     .then(function(data) {
-      displayForecast(data.list[8], 0);
-      displayForecast(data.list[16], 1);
-      displayForecast(data.list[24], 2);
-      displayForecast(data.list[32], 3);
-      displayForecast(data.list[39], 4);
+      if (data.cod !== '404') {
+        displayForecast(data.list[8], 0);
+        displayForecast(data.list[16], 1);
+        displayForecast(data.list[24], 2);
+        displayForecast(data.list[32], 3);
+        displayForecast(data.list[39], 4);
+      }
     })
 };
 
